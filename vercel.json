@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/mesh/:id", "destination": "/api/mesh?id=:id" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
