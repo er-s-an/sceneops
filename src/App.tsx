@@ -3,6 +3,7 @@ import { BriefPanel } from './components/BriefPanel'
 import { OpsChecklist } from './components/OpsChecklist'
 import { SceneBoard } from './components/SceneBoard'
 import { fetchHealth, fetchLatest, fetchTask, meshUrl, startGenerate } from './lib/api'
+import { BAY, SLOTS, slotFromPrompt } from './lib/booth'
 import { loadChecklist, saveChecklist } from './lib/checklist'
 import { SAMPLES } from './lib/samples'
 import type { ChecklistState, JobStatus, OpsBrief, TaskView } from './lib/types'
@@ -25,6 +26,8 @@ export default function App() {
   const [checklist, setChecklist] = useState<ChecklistState>(loadChecklist(null))
 
   const busy = status === 'submitting' || status === 'polling'
+  const slot = SLOTS[slotFromPrompt(brief.prompt)]
+  const skipLatest = new URLSearchParams(window.location.search).get('scene') === 'open'
   const meshSrc = useMemo(() => {
     if (status !== 'ready' || !taskId) return null
     return meshUrl(taskId)
@@ -34,6 +37,7 @@ export default function App() {
     fetchHealth()
       .then(setHealth)
       .catch(() => setHealth({ ok: false, hasKey: false }))
+    if (skipLatest) return
     fetchLatest()
       .then((latest) => {
         if (!latest) return
@@ -50,7 +54,7 @@ export default function App() {
         setChecklist(loadChecklist(latest.taskId))
       })
       .catch(() => undefined)
-  }, [])
+  }, [skipLatest])
 
   useEffect(() => {
     if (status !== 'polling' || !taskId) return
@@ -101,49 +105,42 @@ export default function App() {
 
   return (
     <div className="shell">
-      <header className="topbar">
+      <SceneBoard
+        meshSrc={meshSrc}
+        taskId={taskId}
+        faceCount={task?.faceCount || brief.faceCount}
+        showCollision={checklist.collision}
+        status={status}
+        slot={slot}
+      />
+
+      <header className="callsheet">
         <div className="brand">
-          <h1>SceneOps</h1>
-          <span className="tag">Field props in minutes</span>
+          <p className="wordmark">SceneOps</p>
+          <h1>
+            {BAY.name} · {BAY.show} · doors {BAY.doors}
+          </h1>
         </div>
-        <div className="meta">
-          <span className="pill lux">Aholo Lux3D</span>
-          <span className="pill">Gaming / Spatial Design</span>
-          <span className={health?.hasKey ? 'pill' : 'pill warn'}>
-            {health?.hasKey ? 'Global API keyed' : 'API key missing'}
-          </span>
-        </div>
+        <p className={health?.hasKey ? 'health' : 'health warn'} role="status">
+          {health?.hasKey ? 'Lux3D connected' : 'API key missing'}
+        </p>
       </header>
 
-      <main className="board">
-        <BriefPanel
-          brief={brief}
-          status={status}
-          taskId={taskId}
-          error={error}
-          busy={busy}
-          onChange={setBrief}
-          onGenerate={onGenerate}
-        />
-        <SceneBoard
-          meshSrc={meshSrc}
-          taskId={taskId}
-          faceCount={task?.faceCount || brief.faceCount}
-          showCollision={checklist.collision}
-          checklist={checklist}
-        />
-        <OpsChecklist
-          taskId={taskId}
-          ready={status === 'ready'}
-          checklist={checklist}
-          onChange={onChecklist}
-        />
-      </main>
-
-      <footer className="foot">
-        <span>Live Lux3D generate + poll. No placeholder mesh.</span>
-        <span>English UI · team SceneOps · do not submit from this build</span>
-      </footer>
+      <BriefPanel
+        brief={brief}
+        status={status}
+        taskId={taskId}
+        error={error}
+        busy={busy}
+        onChange={setBrief}
+        onGenerate={onGenerate}
+      />
+      <OpsChecklist
+        taskId={taskId}
+        ready={status === 'ready'}
+        checklist={checklist}
+        onChange={onChecklist}
+      />
     </div>
   )
 }

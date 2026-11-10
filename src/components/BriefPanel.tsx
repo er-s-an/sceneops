@@ -21,6 +21,14 @@ type Props = {
   onGenerate: () => void
 }
 
+const STATUS_COPY: Record<JobStatus, string> = {
+  idle: 'The mark on the floor is empty.',
+  submitting: 'Sending the brief to Lux3D.',
+  polling: 'Lux3D is building the prop.',
+  ready: 'The generated GLB is on the mark.',
+  failed: 'Lux3D could not finish this task.',
+}
+
 export function BriefPanel({ brief, status, taskId, error, busy, onChange, onGenerate }: Props) {
   function onFile(file: File | undefined) {
     if (!file) {
@@ -39,10 +47,13 @@ export function BriefPanel({ brief, status, taskId, error, busy, onChange, onGen
   }
 
   return (
-    <section className="panel">
-      <h2>Ops brief</h2>
+    <section className="dock dock-brief" aria-label="Work order">
+      <header className="dock-head">
+        <h2>Work order</h2>
+        <p>Write the missing prop against this bay. Lux3D will place the real model on the marked pad.</p>
+      </header>
       <div className="panel-body">
-        <div className="samples">
+        <div className="samples" role="group" aria-label="Sample props">
           {SAMPLES.map((sample) => (
             <button
               key={sample.id}
@@ -56,20 +67,22 @@ export function BriefPanel({ brief, status, taskId, error, busy, onChange, onGen
           ))}
         </div>
 
-        <label className="field">
-          Prompt
+        <label className="field" htmlFor="brief-prompt">
+          Missing prop
           <textarea
+            id="brief-prompt"
             data-testid="brief-prompt"
             value={brief.prompt}
             onChange={(e) => onChange({ ...brief, prompt: e.target.value })}
-            placeholder="Chrome stanchion, red rope, game-jam booth…"
+            placeholder="Chrome stanchion, red velvet rope, game-jam booth…"
           />
         </label>
 
         <div className="row">
-          <label className="field">
+          <label className="field" htmlFor="brief-version">
             Lux3D version
             <select
+              id="brief-version"
               data-testid="brief-version"
               value={brief.version}
               onChange={(e) => onChange({ ...brief, version: e.target.value as OpsBrief['version'] })}
@@ -78,9 +91,10 @@ export function BriefPanel({ brief, status, taskId, error, busy, onChange, onGen
               <option value="G1">G1</option>
             </select>
           </label>
-          <label className="field">
+          <label className="field" htmlFor="brief-style">
             Style
             <select
+              id="brief-style"
               data-testid="brief-style"
               value={brief.style}
               onChange={(e) => onChange({ ...brief, style: e.target.value as OpsBrief['style'] })}
@@ -94,29 +108,31 @@ export function BriefPanel({ brief, status, taskId, error, busy, onChange, onGen
           </label>
         </div>
 
-        <label className="field">
+        <label className="field" htmlFor="brief-faces">
           Face budget
           <select
+            id="brief-faces"
             value={brief.faceCount}
             onChange={(e) => onChange({ ...brief, faceCount: Number(e.target.value) })}
           >
-            <option value={20000}>20k · fast booth check</option>
-            <option value={40000}>40k · default</option>
-            <option value={80000}>80k · closer look</option>
-            <option value={200000}>200k · print-ish</option>
+            <option value={20000}>20,000 · fast booth check</option>
+            <option value={40000}>40,000 · default</option>
+            <option value={80000}>80,000 · closer look</option>
+            <option value={200000}>200,000 · print-ish</option>
           </select>
         </label>
 
-        <label className="field">
-          Optional photo
+        <label className="field" htmlFor="brief-photo">
+          Optional reference photo
           <span className="file">
             <input
+              id="brief-photo"
               type="file"
               accept="image/png,image/jpeg,image/webp"
               data-testid="brief-photo"
               onChange={(e) => onFile(e.target.files?.[0])}
             />
-            {brief.imageName || 'No reference'}
+            {brief.imageName || 'No reference attached'}
           </span>
         </label>
 
@@ -132,6 +148,7 @@ export function BriefPanel({ brief, status, taskId, error, busy, onChange, onGen
 
         <div className={`status ${status}`} data-testid="job-status" aria-live="polite">
           <b>{status}</b>
+          <span>{STATUS_COPY[status]}</span>
           <span data-testid="job-task-id">{taskId ? `task ${taskId}` : 'no task yet'}</span>
           {error ? <span className="err">{error}</span> : null}
         </div>

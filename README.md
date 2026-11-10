@@ -1,6 +1,6 @@
 # SceneOps
 
-Field and booth ops leads need a runnable 3D prop in minutes, not a DCC ticket. SceneOps takes a short ops brief, calls **Aholo Lux3D** (`G1` or `G1-Turbo`), polls the task, mounts the GLB on a browser scene board, and attaches a placement / collision / print-export checklist.
+A booth floor with a missing prop. Field and booth ops leads write a short brief against that space; **Aholo Lux3D** generates a real GLB and SceneOps places it on the marked pad. Placement, collision, and print/export happen in the bay, not in an empty viewer.
 
 Lux3D is the product path. There is no placeholder mesh.
 
@@ -10,11 +10,11 @@ Live demo: https://sceneops.vercel.app · source: https://github.com/er-s-an/sce
 
 ## What you can do
 
-1. Type a booth brief, or load a sample (stanchion, A2 stand, demo table).
-2. Optionally attach a reference photo.
+1. Open the bay. The missing-prop mark is already on the floor (default work order: chrome stanchion with red velvet rope).
+2. Adjust the brief, or load a sample (stanchion, A2 stand, demo table). Optionally attach a reference photo.
 3. Generate with Lux3D. The server holds the Global API key.
-4. Wait until the GLB lands on the scene board (world +Y up, mesh sat on the floor).
-5. Tick the ops checklist and download the GLB.
+4. When the GLB is ready, it lands on the marked pad (world +Y up, mesh sat on the floor).
+5. Tick placement, collision, and print/export, then download the GLB.
 
 ## Run locally
 
@@ -29,6 +29,8 @@ Need a Global API key from [labs.aholo.ai/api-keys](https://labs.aholo.ai/api-ke
 ```bash
 npm run verify               # doctor + happy path against live Lux3D
 ```
+
+Open `/?scene=open` to keep the bay empty (skip the last cached job) and see the missing mark clearly.
 
 ## Honesty
 
