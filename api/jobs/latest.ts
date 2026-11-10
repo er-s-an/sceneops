@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { latestReady } from '../../server/lux3d'
+import { latestReady } from '../_lib/lux3d'
 
 type VercelRequest = unknown
 type VercelResponse = {

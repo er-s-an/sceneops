@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { createTask, type LuxStyle, type LuxVersion } from '../server/lux3d'
+import { createTask, type LuxStyle, type LuxVersion } from './_lib/lux3d'
 
 type VercelRequest = { method?: string; body?: Record<string, unknown> }
 type VercelResponse = {
