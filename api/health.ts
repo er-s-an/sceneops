@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { healthPayload } from '../server/lux3d.ts'
+import { healthPayload } from '../server/lux3d'
 
 type VercelRequest = { method?: string; body?: unknown; query: Record<string, string | string[] | undefined> }
 type VercelResponse = {

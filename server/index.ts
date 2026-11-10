@@ -12,7 +12,7 @@ import {
   type GenerateInput,
   type LuxStyle,
   type LuxVersion,
-} from './lux3d.ts'
+} from './lux3d.js'
 
 config({ path: '.env.local' })
 config()
