@@ -1,1 +1,2 @@
-export * from '../api/_lib/lux3d.js'
+export * from '../api/_lib/lux3d.js';
+

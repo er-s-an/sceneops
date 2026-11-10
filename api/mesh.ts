@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 import { readFile } from 'node:fs/promises'
-import { getTask, meshPath } from './_lib/lux3d'
+import { getTask, meshPath } from './_lib/lux3d.js'
 
 type VercelRequest = { query: Record<string, string | string[] | undefined> }
 type VercelResponse = {

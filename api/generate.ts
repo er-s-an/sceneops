@@ -1,5 +1,15 @@
 import { config } from 'dotenv'
-import { createTask, type LuxStyle, type LuxVersion } from './_lib/lux3d'
+import { createTask } from './_lib/lux3d.js'
+
+type LuxVersion = 'G1' | 'G1-Turbo'
+type LuxStyle =
+  | 'photorealistic'
+  | 'cartoon'
+  | 'anime'
+  | 'hand_painted'
+  | 'cyberpunk'
+  | 'fantasy'
+  | 'glass'
 
 type VercelRequest = { method?: string; body?: Record<string, unknown> }
 type VercelResponse = {

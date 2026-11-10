@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { getTask } from '../_lib/lux3d'
+import { getTask } from '../_lib/lux3d.js'
 
 type VercelRequest = { query: Record<string, string | string[] | undefined> }
 type VercelResponse = {
