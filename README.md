@@ -6,6 +6,8 @@ Lux3D is the product path. There is no placeholder mesh.
 
 Built for the Manycore Aholo Global 3D AI Hackathon. Award tracks: Gaming / Spatial Design. Team: SceneOps. English UI.
 
+Live demo: https://sceneops.vercel.app · source: https://github.com/er-s-an/sceneops
+
 ## What you can do
 
 1. Type a booth brief, or load a sample (stanchion, A2 stand, demo table).
